@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 SCRIPT: auditd_report.py
-Autor: [Tu Nombre]
+Autor: Paola Medrano
 Descripción:
     Compara los registros de logs de auditd con un reporte general de agentes,
     y genera dos archivos:
@@ -59,28 +59,32 @@ def procesar_datos(auditd_csv, datos_idr_csv):
             no_encontrados_df.to_csv('sin_coincidencia.csv', index=False)
             print("Archivo 'sin_coincidencia.csv' creado con los ID_Agent sin coincidencia.")
         else:
+
+            
             print("Todos los ID_Agent de auditd.csv tienen coincidencia.")
     except Exception as e:
         print(f"Error al procesar datos: {e}")
 
 def leer_datos():
-    archivo1 = input("Ingresa el nombre del primer archivo CSV de logs de auditd sacados de la plataforma de InsightIDR: ")
-    archivo2 = input("Ingresa el nombre del segundo archivo CSV sacado del reporte de InsightIDR: ")
+    while True:
+        archivo1 = input("Ingresa el nombre del primer archivo CSV de logs de auditd sacados de la plataforma de InsightIDR: ")
+        archivo2 = input("Ingresa el nombre del segundo archivo CSV sacado del reporte de InsightIDR: ")
 
-    # Validación de extensión .csv
-    if not archivo1.endswith(".csv") or not archivo2.endswith(".csv"):
-        print("Por favor, asegúrate de ingresar archivos con extensión .csv")
-        return
+        # Validación de extensión .csv
+        if not archivo1.endswith(".csv") or not archivo2.endswith(".csv"):
+            print("Por favor, asegúrate de ingresar archivos con extensión .csv")
+            continue
 
-    # Validación de existencia de los archivos
-    if not os.path.isfile(archivo1) or not os.path.isfile(archivo2):
-        print("Uno o ambos archivos no se encuentran en el directorio actual. Verifica los nombres e intenta de nuevo.")
-        return
+        # Validación de existencia de los archivos
+        if not os.path.isfile(archivo1) or not os.path.isfile(archivo2):
+            print("Uno o ambos archivos no se encuentran en el directorio actual. Verifica los nombres e intenta de nuevo.")
+            continue
 
-    try:
-        procesar_datos(archivo1, archivo2)
-    except FileNotFoundError:
-        print("Error: Uno de los archivos no se encontró. Verifica los nombres e intenta de nuevo.")
+        try:
+            procesar_datos(archivo1, archivo2)
+            break
+        except FileNotFoundError:
+            print("Error: Uno de los archivos no se encontró. Verifica los nombres e intenta de nuevo.")
 
 # llamar a la funcion
 if __name__ == "__main__":
